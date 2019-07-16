@@ -1,13 +1,14 @@
-package com.example.fordlabs.weatherviewpager;
+package com.example.fordlabs.weatherviewpager.adapter;
 
-import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.fordlabs.weatherviewpager.viewmodel.WeatherViewModel;
 import com.example.fordlabs.weatherviewpager.databinding.ViewpagerItemBinding;
 
 public class CustomAdapter extends PagerAdapter {
@@ -33,6 +34,7 @@ public class CustomAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        Log.i("MSG*************", "destroyItem: ");
         ViewpagerItemBinding viewpagerItemBinding = (ViewpagerItemBinding) object;
         viewpagerItemBinding.setViewmodel(null);
         container.removeView(viewpagerItemBinding.getRoot());
@@ -42,7 +44,7 @@ public class CustomAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return weatherViewModel.getCityNames().length;
     }
 
     @Override

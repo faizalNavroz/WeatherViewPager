@@ -7,17 +7,17 @@
 
         <variable
             name="viewmodel"
-            type="com.example.fordlabs.weatherviewpager.WeatherViewModel" />
+            type="com.example.fordlabs.weatherviewpager.viewmodel.WeatherViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".activity.MainActivity">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager"
-            onPageChangeListener="@{viewmodel::onPageSwipe}"
+            onChangeListener="@{viewmodel::onSwipe}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"

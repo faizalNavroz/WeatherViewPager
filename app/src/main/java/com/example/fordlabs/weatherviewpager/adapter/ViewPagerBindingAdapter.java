@@ -1,13 +1,12 @@
-package com.example.fordlabs.weatherviewpager;
+package com.example.fordlabs.weatherviewpager.adapter;
 
 import android.databinding.BindingAdapter;
 import android.support.v4.view.ViewPager;
 
 public class ViewPagerBindingAdapter {
 
-    @BindingAdapter("onPageChangeListener")
-    public static void onPageChanged(ViewPager viewPager,final PageSelectionListener pageSelectedListener){
-
+    @BindingAdapter("onChangeListener")
+    public static void onSwipeAction(ViewPager viewPager, final SelectPageInterface selectPageInterface){
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -16,7 +15,7 @@ public class ViewPagerBindingAdapter {
 
             @Override
             public void onPageSelected(int i) {
-            pageSelectedListener.onPageSelected(i);
+            selectPageInterface.selectPage(i);
             }
 
             @Override
@@ -25,12 +24,16 @@ public class ViewPagerBindingAdapter {
             }
         });
 
+
     }
 
 
-    @FunctionalInterface
-    public interface PageSelectionListener {
-        void onPageSelected(int position);
-    }
+        @FunctionalInterface
+        public interface SelectPageInterface{
+        void selectPage(int position);
+
+        }
+
+
 }
 

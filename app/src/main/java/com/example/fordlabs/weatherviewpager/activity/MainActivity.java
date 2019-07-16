@@ -1,9 +1,12 @@
-package com.example.fordlabs.weatherviewpager;
+package com.example.fordlabs.weatherviewpager.activity;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.fordlabs.weatherviewpager.adapter.CustomAdapter;
+import com.example.fordlabs.weatherviewpager.R;
+import com.example.fordlabs.weatherviewpager.viewmodel.WeatherViewModel;
 import com.example.fordlabs.weatherviewpager.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
 
         WeatherViewModel weatherViewModel = new WeatherViewModel();
-
 
         CustomAdapter adapter = new CustomAdapter(weatherViewModel);
         binding.viewPager.setAdapter(adapter);
