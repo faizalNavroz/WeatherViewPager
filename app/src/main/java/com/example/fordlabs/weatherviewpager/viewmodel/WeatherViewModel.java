@@ -10,32 +10,36 @@ import android.util.Log;
 
 import com.example.fordlabs.weatherviewpager.BR;
 import com.example.fordlabs.weatherviewpager.model.WeatherResponse;
-import com.example.fordlabs.weatherviewpager.network.ApiClient;
 import com.example.fordlabs.weatherviewpager.network.ApiInterface;
+import com.example.fordlabs.weatherviewpager.network.WeatherServiceManager;
 
 import java.text.DecimalFormat;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import javax.inject.Inject;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class WeatherViewModel extends BaseObservable implements LifecycleObserver {
 
     public static final String TAG="WeatherViewModel";
 
+    @Inject
     ApiInterface apiInterface;
 
     String [] cityNames = {"Chennai,in","London","Delhi,in","Kolkata,in","Pune,in"};
 
-
-    //ObservableField<String>cityName = new ObservableField<String>();
-
     ObservableField<WeatherResponse>weatherRepObj = new ObservableField<WeatherResponse>();
 
-    /*@Bindable
-    public String getCityName(){
-        return cityName.get();
-    }*/
+    @Inject
+    public WeatherViewModel() {
+    }
+
+
+    @Inject
+    WeatherServiceManager weatherServiceManager;
 
     @Bindable
     public String getCityName(){
@@ -77,31 +81,35 @@ public class WeatherViewModel extends BaseObservable implements LifecycleObserve
 
     public void onSwipe(int position){
 
-        apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+        weatherServiceManager.getWeatherResponse(cityNames[position]).
+                subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
+                subscribe(new Observer<WeatherResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-        final Call<WeatherResponse> weatherResponseCall = apiInterface.getWeatherResponse(cityNames[position]);
+                    }
 
-        weatherResponseCall.enqueue(new Callback<WeatherResponse>() {
-            @Override
-            public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
-                Log.d("msg************", response.body().toString());
-                if (response.isSuccessful()) {
-                    weatherRepObj.set(response.body());
-                    //cityName.set(response.body().getName());
+                    @Override
+                    public void onNext(WeatherResponse value) {
+                    weatherRepObj.set(value);
                     notifyPropertyChanged(BR._all);
+                    }
 
-                }
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onFailure(Call<WeatherResponse> call, Throwable t) {
-                Log.d("msg", "error");
-            }
-        });
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
 
 
     }
+
 
 
     public String[] getCityNames() {
